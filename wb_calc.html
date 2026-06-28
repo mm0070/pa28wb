@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cherokee 140 — W&amp;B</title>
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="C140 W&amp;B">
+  <style>
+    :root {
+      --bg: #f0f4f8;
+      --card: #ffffff;
+      --border: #dde3ec;
+      --text: #1a202c;
+      --muted: #64748b;
+      --primary: #2563eb;
+      --green: #16a34a;
+      --green-bg: #dcfce7;
+      --green-text: #14532d;
+      --red: #dc2626;
+      --red-bg: #fee2e2;
+      --red-text: #7f1d1d;
+      --blue-bg: #dbeafe;
+      --blue-text: #1e3a8a;
+      --amber-bg: #fef3c7;
+      --amber-text: #78350f;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 12px;
+      max-width: 520px;
+      margin: 0 auto;
+      font-size: 15px;
+      line-height: 1.4;
+    }
+    h1 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      text-align: center;
+      padding: 10px 0 14px;
+      color: var(--text);
+      letter-spacing: -0.01em;
+    }
+    .card {
+      background: var(--card);
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      padding: 14px 16px;
+      margin-bottom: 10px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .section-title {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+    label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: var(--text);
+    }
+    select, input[type="number"] {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1.5px solid var(--border);
+      border-radius: 9px;
+      font-size: 1rem;
+      color: var(--text);
+      background: var(--card);
+      -webkit-appearance: none;
+      appearance: none;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2364748b' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px; }
+    select:focus, input[type="number"]:focus { border-color: var(--primary); }
+    input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; }
+    .field { margin-bottom: 10px; }
+    .field:last-child { margin-bottom: 0; }
+    .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+    /* W&B table */
+    .wb-table { width: 100%; border-collapse: collapse; }
+    .wb-table thead th {
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      padding: 0 4px 8px;
+      text-align: right;
+    }
+    .wb-table thead th:first-child { text-align: left; }
+    .wb-table tbody tr { border-top: 1px solid #f1f5f9; }
+    .wb-table tbody tr:first-child { border-top: none; }
+    .wb-table td {
+      padding: 6px 4px;
+      vertical-align: middle;
+      font-size: 0.82rem;
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+    .wb-table td:first-child {
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--text);
+      text-align: left;
+      width: 34%;
+    }
+    .wb-table td.dim { color: var(--muted); }
+    .wb-table td input {
+      padding: 7px 8px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.9rem;
+      width: 100%;
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+    .wb-table tfoot tr { border-top: 2px solid var(--border); }
+    .wb-table tfoot td {
+      padding: 7px 4px 2px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+    .wb-table tfoot td:first-child { text-align: left; font-weight: 600; }
+    .wb-table .cg-row td { border-top: 1px solid var(--border); font-weight: 600; padding-top: 5px; }
+    .wb-table .cg-row td:first-child { font-weight: 600; }
+
+    /* Fuel quick buttons */
+    .fuel-btns { display: flex; gap: 6px; margin-top: 6px; }
+    .fuel-btn {
+      flex: 1;
+      padding: 7px 4px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg);
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--primary);
+      cursor: pointer;
+      text-align: center;
+      -webkit-tap-highlight-color: transparent;
+      transition: background 0.1s;
+    }
+    .fuel-btn:active { background: #eff6ff; border-color: var(--primary); }
+
+    .status-badge {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 13px 16px;
+      border-radius: 11px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      min-height: 52px;
+      text-align: center;
+    }
+    .badge-go { background: var(--green-bg); color: var(--green-text); }
+    .badge-nogo { background: var(--red-bg); color: var(--red-text); }
+    .badge-pending { background: var(--bg); color: var(--muted); border: 1.5px dashed var(--border); }
+    .utility-line {
+      margin-top: 8px;
+      text-align: center;
+      font-size: 0.825rem;
+      padding: 6px 12px;
+      border-radius: 7px;
+      font-weight: 600;
+    }
+    .util-yes { background: var(--blue-bg); color: var(--blue-text); }
+    .util-no { background: var(--amber-bg); color: var(--amber-text); }
+
+    /* Chart */
+    canvas {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 0.72rem;
+      color: var(--muted);
+      padding: 8px 0 20px;
+      line-height: 1.6;
+    }
+    footer strong { color: var(--red); }
+  </style>
+</head>
+<body>
+
+<div style="background:#fef2f2;border:1.5px solid #fca5a5;border-radius:10px;padding:10px 14px;margin-bottom:12px;text-align:center;font-size:0.8rem;font-weight:600;color:#991b1b;line-height:1.6;">
+  ⚠️ FOR FLIGHT SIMULATION USE ONLY<br>
+  <span style="font-weight:400;color:#b91c1c">Do not use for real-world flight planning. Always refer to the official aircraft POH/AFM.</span><br>
+  <span style="font-weight:400;color:#b91c1c">This tool is 100% vibe-coded by an AI with no aeronautical engineering oversight. The envelope values, calculations, and limits may be wrong. <strong>Do not trust it.</strong></span>
+</div>
+
+<h1>&#9992; Cherokee 140 — Weight &amp; Balance</h1>
+
+<!-- Aircraft -->
+<div class="card">
+  <div class="section-title">Aircraft</div>
+  <div class="field">
+    <label for="aircraftSel">Registration</label>
+    <select id="aircraftSel" onchange="onAircraftChange()">
+      <option value="">— Select or enter manually —</option>
+      <option value="G-PETR">G-PETR</option>
+      <option value="N150PK">N150PK</option>
+      <option value="G-BCGJ">G-BCGJ</option>
+      <option value="G-BTGO">G-BTGO</option>
+      <option value="G-FIAT">G-FIAT</option>
+      <option value="G-MKAS">G-MKAS</option>
+    </select>
+  </div>
+  <div class="row2">
+    <div>
+      <label for="emptyWt">Empty Weight (lbs)</label>
+      <input type="number" id="emptyWt" placeholder="lbs" inputmode="decimal" oninput="calc()">
+    </div>
+    <div>
+      <label for="emptyArm">Empty Arm (in)</label>
+      <input type="number" id="emptyArm" placeholder="inches" inputmode="decimal" step="0.01" oninput="calc()">
+    </div>
+  </div>
+</div>
+
+<!-- Fuel -->
+<div class="card">
+  <div class="section-title">Fuel</div>
+  <label for="fuelL">Fuel quantity (litres)</label>
+  <input type="number" id="fuelL" placeholder="0 – 181 L" inputmode="decimal" min="0" max="181" oninput="calc()">
+  <div class="fuel-btns">
+    <button class="fuel-btn" onclick="setFuel(181)">Full<br><span style="font-weight:400;color:var(--muted)">181 L</span></button>
+    <button class="fuel-btn" onclick="setFuel(130)">Tabs<br><span style="font-weight:400;color:var(--muted)">130 L</span></button>
+    <button class="fuel-btn" onclick="setFuel(56)">Min legal<br><span style="font-weight:400;color:var(--muted)">~56 L</span></button>
+    <button class="fuel-btn" onclick="setFuel(0)">Empty<br><span style="font-weight:400;color:var(--muted)">0 L</span></button>
+  </div>
+  <div style="font-size:0.78rem;color:var(--muted);margin-top:8px">
+    = <strong id="fuelLbsDisp">0</strong> lbs &nbsp;|&nbsp; Arm: 95.0 in &nbsp;|&nbsp; Burn: ~28 L/hr
+  </div>
+</div>
+
+<!-- W&B Table -->
+<div class="card">
+  <div class="section-title">Weight &amp; Balance</div>
+  <table class="wb-table">
+    <thead>
+      <tr>
+        <th>Station</th>
+        <th>Weight (lbs)</th>
+        <th>Arm (in)</th>
+        <th>Moment (in&#8209;lbs)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Aircraft Empty</td>
+        <td id="tEmptyWt" class="dim">—</td>
+        <td id="tEmptyArm" class="dim">—</td>
+        <td id="tEmptyMom" class="dim">—</td>
+      </tr>
+      <tr>
+        <td>Fuel</td>
+        <td id="tFuelWt" class="dim">—</td>
+        <td class="dim">95.0</td>
+        <td id="tFuelMom" class="dim">—</td>
+      </tr>
+      <tr>
+        <td>Pilot + Front Pax</td>
+        <td><input type="number" id="frontPax" placeholder="0" inputmode="decimal" min="0" oninput="calc()"></td>
+        <td class="dim">85.5</td>
+        <td id="frontMom">—</td>
+      </tr>
+      <tr>
+        <td>Rear Passengers</td>
+        <td><input type="number" id="rearPax" placeholder="0" inputmode="decimal" min="0" oninput="calc()"></td>
+        <td class="dim">117.0</td>
+        <td id="rearMom">—</td>
+      </tr>
+      <tr>
+        <td>Baggage</td>
+        <td><input type="number" id="baggage" placeholder="0" inputmode="decimal" min="0" oninput="calc()"></td>
+        <td class="dim">133.0</td>
+        <td id="baggageMom">—</td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td>Totals</td>
+        <td id="totalWtCell">—</td>
+        <td></td>
+        <td id="totalMomCell">—</td>
+      </tr>
+      <tr class="cg-row">
+        <td colspan="2">Centre of Gravity</td>
+        <td colspan="2" id="cgCell">—</td>
+      </tr>
+    </tfoot>
+  </table>
+
+  <div style="margin-top:14px">
+    <div class="status-badge badge-pending" id="statusBadge">Select aircraft above</div>
+    <div id="utilityLine" style="display:none"></div>
+  </div>
+</div>
+
+<!-- Chart -->
+<div class="card">
+  <div class="section-title">CG Envelope</div>
+  <canvas id="cgCanvas"></canvas>
+</div>
+
+<footer>
+  Max gross weight 2150 lbs &nbsp;·&nbsp; Max fuel 181 L (48 USG) &nbsp;·&nbsp; Burn ~28 L/hr<br>
+  Envelope values are approximate — <strong>verify against the aircraft POH before flight</strong>
+</footer>
+
+<script>
+  // ── Aircraft data ──────────────────────────────────────────────────
+  const AIRCRAFT_DB = {
+    'G-PETR': { ew: 1466, ea: 85.98 },
+    'N150PK': { ew: 1481, ea: 87.32 },
+    'G-BCGJ': { ew: 1451, ea: 87.75 },
+    'G-BTGO': { ew: 1396, ea: 84.62 },
+    'G-FIAT': { ew: 1432, ea: 87.30 },
+    'G-MKAS': { ew: 1421, ea: 86.93 },
+  };
+
+  // ── Station arms (inches) ──────────────────────────────────────────
+  const ARM_FUEL    = 95.0;
+  const ARM_FRONT   = 85.5;
+  const ARM_REAR    = 117.0;
+  const ARM_BAGGAGE = 133.0;
+
+  const FUEL_LBS_PER_LITRE = 1.58;
+  const MAX_WEIGHT = 2150;
+
+  // ── CG Envelope ───────────────────────────────────────────────────
+  // Normal category: slanted forward limit
+  //   At 1500 lbs → 84.0 in;  At 2150 lbs → 87.5 in  (linear)
+  //   Aft limit: 95.0 in
+  const NORM_FWD_W1 = 1500, NORM_FWD_CG1 = 84.0;
+  const NORM_FWD_W2 = 2150, NORM_FWD_CG2 = 87.5;
+  const NORM_AFT    = 95.8;
+
+  // Utility category: 1550–1950 lbs, CG must be ≤ 86.3 in (and ≥ normal fwd limit)
+  const UTIL_MIN_WT = 1550;
+  const UTIL_MAX_WT = 1950;
+  const UTIL_AFT_CG = 86.3;
+
+  function normalFwdLimit(w) {
+    const cg = NORM_FWD_CG1 + (w - NORM_FWD_W1) * (NORM_FWD_CG2 - NORM_FWD_CG1) / (NORM_FWD_W2 - NORM_FWD_W1);
+    return Math.max(NORM_FWD_CG1, Math.min(NORM_FWD_CG2, cg));
+  }
+
+  function inNormal(w, cg) {
+    return w <= MAX_WEIGHT && cg >= normalFwdLimit(w) && cg <= NORM_AFT;
+  }
+
+  function inUtility(w, cg) {
+    return w >= UTIL_MIN_WT && w <= UTIL_MAX_WT && cg >= normalFwdLimit(w) && cg <= UTIL_AFT_CG;
+  }
+
+  // ── UI helpers ────────────────────────────────────────────────────
+  function v(id) { return parseFloat(document.getElementById(id).value) || 0; }
+  function fmt(n, d=1) { return isNaN(n) ? '—' : n.toFixed(d); }
+  function fmtMom(n) { if (!n) return '—'; return Math.round(n).toLocaleString(); }
+
+  function onAircraftChange() {
+    const sel = document.getElementById('aircraftSel').value;
+    if (AIRCRAFT_DB[sel]) {
+      document.getElementById('emptyWt').value  = AIRCRAFT_DB[sel].ew;
+      document.getElementById('emptyArm').value = AIRCRAFT_DB[sel].ea;
+    }
+    calc();
+  }
+
+  function setFuel(litres) {
+    document.getElementById('fuelL').value = litres;
+    calc();
+  }
+
+  // ── Main calculation ──────────────────────────────────────────────
+  function calc() {
+    const ew  = v('emptyWt');
+    const ea  = v('emptyArm');
+    const fl  = v('fuelL');
+    const fp  = v('frontPax');
+    const rp  = v('rearPax');
+    const bg  = v('baggage');
+
+    const fuelLbs = fl * FUEL_LBS_PER_LITRE;
+    document.getElementById('fuelLbsDisp').textContent = fmt(fuelLbs, 1);
+
+    const emMom  = ew * ea;
+    const fuMom  = fuelLbs * ARM_FUEL;
+    const fpMom  = fp * ARM_FRONT;
+    const rpMom  = rp * ARM_REAR;
+    const bgMom  = bg * ARM_BAGGAGE;
+
+    // Full W&B table cells
+    const set = (id, v) => { document.getElementById(id).textContent = v; };
+    set('tEmptyWt',  ew  ? fmt(ew, 1)        : '—');
+    set('tEmptyArm', ea  ? fmt(ea, 2)         : '—');
+    set('tEmptyMom', ew  ? fmtMom(emMom)      : '—');
+    set('tFuelWt',   fl  ? fmt(fuelLbs, 1)    : '—');
+    set('tFuelMom',  fl  ? fmtMom(fuMom)      : '—');
+    set('frontMom',  fp  ? fmtMom(fpMom)      : '—');
+    set('rearMom',   rp  ? fmtMom(rpMom)      : '—');
+    set('baggageMom',bg  ? fmtMom(bgMom)      : '—');
+
+    const totalWt  = ew + fuelLbs + fp + rp + bg;
+    const totalMom = emMom + fuMom + fpMom + rpMom + bgMom;
+    const cg = totalWt > 0 ? totalMom / totalWt : null;
+
+    set('totalWtCell',  ew ? fmt(totalWt, 1)  : '—');
+    set('totalMomCell', ew ? fmtMom(totalMom) : '—');
+    set('cgCell',       cg ? `${fmt(cg, 2)} in` : '—');
+
+    const badge = document.getElementById('statusBadge');
+    const utilLine = document.getElementById('utilityLine');
+
+    if (!ew) {
+      badge.className = 'status-badge badge-pending';
+      badge.textContent = 'Select aircraft above';
+      utilLine.style.display = 'none';
+      drawChart(null, null);
+      return;
+    }
+
+    const ok = cg !== null && inNormal(totalWt, cg);
+
+    if (ok) {
+      badge.className = 'status-badge badge-go';
+      badge.textContent = '✓  WITHIN LIMITS';
+
+      const util = inUtility(totalWt, cg);
+      utilLine.style.display = 'block';
+      utilLine.className = 'utility-line ' + (util ? 'util-yes' : 'util-no');
+      utilLine.textContent = util
+        ? 'Utility category: YES'
+        : 'Utility category: NO — Normal only';
+    } else {
+      badge.className = 'status-badge badge-nogo';
+      let why = '';
+      if (cg !== null) {
+        if (totalWt > MAX_WEIGHT)           why = ` — ${fmt(totalWt - MAX_WEIGHT, 0)} lbs over MTOW`;
+        else if (cg > NORM_AFT)             why = ` — CG ${fmt(cg, 2)}" is too far aft`;
+        else if (cg < normalFwdLimit(totalWt)) why = ` — CG ${fmt(cg, 2)}" is too far forward`;
+      }
+      badge.textContent = '✗  OUT OF LIMITS' + why;
+      utilLine.style.display = 'none';
+    }
+
+    drawChart(totalWt, cg);
+  }
+
+  // ── CG Envelope chart ─────────────────────────────────────────────
+  function drawChart(weight, cg) {
+    const canvas = document.getElementById('cgCanvas');
+    const dpr = window.devicePixelRatio || 1;
+    const cssW = canvas.parentElement.clientWidth - 2; // small inset
+    const cssH = Math.round(cssW * 0.72);
+
+    canvas.width  = cssW * dpr;
+    canvas.height = cssH * dpr;
+    canvas.style.width  = cssW + 'px';
+    canvas.style.height = cssH + 'px';
+
+    const ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
+
+    const W = cssW, H = cssH;
+    const ml = 46, mr = 12, mt = 14, mb = 34;
+    const cw = W - ml - mr, ch = H - mt - mb;
+
+    const X0 = 82, X1 = 98;
+    const Y0 = 1400, Y1 = 2250;
+
+    function px(cgV, wtV) {
+      return [
+        ml + (cgV - X0) / (X1 - X0) * cw,
+        mt + ch - (wtV - Y0) / (Y1 - Y0) * ch
+      ];
+    }
+
+    // Background
+    ctx.fillStyle = '#fafbfc';
+    ctx.fillRect(0, 0, W, H);
+
+    // Grid
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = '#edf2f7';
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = `${10}px -apple-system, sans-serif`;
+
+    for (let x = 82; x <= 98; x += 2) {
+      const [gx] = px(x, Y0);
+      ctx.beginPath(); ctx.moveTo(gx, mt); ctx.lineTo(gx, mt + ch); ctx.stroke();
+      ctx.textAlign = 'center';
+      ctx.fillText(x, gx, mt + ch + 14);
+    }
+    for (let y = 1500; y <= 2200; y += 100) {
+      const [, gy] = px(X0, y);
+      ctx.beginPath(); ctx.moveTo(ml, gy); ctx.lineTo(ml + cw, gy); ctx.stroke();
+      ctx.textAlign = 'right';
+      ctx.fillText(y, ml - 4, gy + 3.5);
+    }
+
+    // Axis labels
+    ctx.fillStyle = '#64748b';
+    ctx.font = `${10}px -apple-system, sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.fillText('C of G (inches)', ml + cw / 2, H - 4);
+    ctx.save();
+    ctx.translate(11, mt + ch / 2);
+    ctx.rotate(-Math.PI / 2);
+    ctx.fillText('Weight (lbs)', 0, 0);
+    ctx.restore();
+
+    // ── Utility envelope ──────────────────────────────────────────
+    // Wedge: bounded by normal fwd limit (left), UTIL_AFT_CG (right),
+    // UTIL_MIN_WT (bottom), tapering to apex where fwd limit meets UTIL_AFT_CG
+    const utilApexWt = (() => {
+      const w = NORM_FWD_W1 + (UTIL_AFT_CG - NORM_FWD_CG1) * (NORM_FWD_W2 - NORM_FWD_W1) / (NORM_FWD_CG2 - NORM_FWD_CG1);
+      return Math.min(w, UTIL_MAX_WT);
+    })();
+
+    ctx.beginPath();
+    ctx.moveTo(...px(normalFwdLimit(UTIL_MIN_WT), UTIL_MIN_WT));
+    ctx.lineTo(...px(UTIL_AFT_CG, UTIL_MIN_WT));
+    ctx.lineTo(...px(UTIL_AFT_CG, utilApexWt));
+    for (let w = utilApexWt; w >= UTIL_MIN_WT; w -= 15)
+      ctx.lineTo(...px(normalFwdLimit(w), w));
+    ctx.closePath();
+    ctx.fillStyle = 'rgba(219,234,254,0.6)';
+    ctx.fill();
+    ctx.strokeStyle = '#60a5fa';
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([4, 3]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Utility label — centred inside the wedge at mid-height
+    const utilMidWt = (UTIL_MIN_WT + utilApexWt) / 2;
+    const [ulx, uly] = px((normalFwdLimit(utilMidWt) + UTIL_AFT_CG) / 2, utilMidWt);
+    ctx.fillStyle = '#1d4ed8';
+    ctx.font = `bold ${9}px -apple-system, sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.fillText('UTL', ulx, uly);
+
+    // ── Normal envelope ───────────────────────────────────────────
+    ctx.beginPath();
+    // Build forward limit path from Y0 to MAX_WEIGHT
+    const fwdSteps = [];
+    for (let w = Y0; w <= MAX_WEIGHT; w += 20) fwdSteps.push(px(normalFwdLimit(w), w));
+    fwdSteps.push(px(normalFwdLimit(MAX_WEIGHT), MAX_WEIGHT));
+
+    ctx.moveTo(...fwdSteps[0]);
+    fwdSteps.forEach(p => ctx.lineTo(...p));
+    ctx.lineTo(...px(NORM_AFT, MAX_WEIGHT));
+    ctx.lineTo(...px(NORM_AFT, Y0));
+    ctx.closePath();
+
+    ctx.fillStyle = 'rgba(187,247,208,0.45)';
+    ctx.fill();
+    ctx.strokeStyle = '#22c55e';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Normal label
+    const [nlx, nly] = px(91.5, 1600);
+    ctx.fillStyle = '#15803d';
+    ctx.font = `bold ${9.5}px -apple-system, sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.fillText('NORMAL', nlx, nly);
+
+    // ── Max weight dashed line ────────────────────────────────────
+    const [mwx1, mwy] = px(X0, MAX_WEIGHT);
+    const [mwx2]      = px(X1, MAX_WEIGHT);
+    ctx.beginPath(); ctx.moveTo(mwx1, mwy); ctx.lineTo(mwx2, mwy);
+    ctx.strokeStyle = '#f87171';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([4, 3]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = '#ef4444';
+    ctx.font = `${8.5}px -apple-system, sans-serif`;
+    ctx.textAlign = 'left';
+    ctx.fillText('MAX 2150 lbs', mwx1 + 4, mwy - 3);
+
+    // ── Axis border ───────────────────────────────────────────────
+    ctx.strokeStyle = '#cbd5e1';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(ml, mt, cw, ch);
+
+    // ── CG point ─────────────────────────────────────────────────
+    if (weight !== null && cg !== null && weight > 0) {
+      const [cx, cy] = px(cg, weight);
+      const ok = inNormal(weight, cg);
+      const dotColor = ok ? '#16a34a' : '#dc2626';
+      const glowColor = ok ? 'rgba(22,163,74,0.18)' : 'rgba(220,38,38,0.18)';
+
+      // Crosshairs
+      ctx.strokeStyle = ok ? 'rgba(22,163,74,0.35)' : 'rgba(220,38,38,0.35)';
+      ctx.lineWidth = 1;
+      ctx.setLineDash([3, 3]);
+      ctx.beginPath();
+      ctx.moveTo(ml, cy); ctx.lineTo(cx - 9, cy);
+      ctx.moveTo(cx + 9, cy); ctx.lineTo(ml + cw, cy);
+      ctx.moveTo(cx, mt); ctx.lineTo(cx, cy - 9);
+      ctx.moveTo(cx, cy + 9); ctx.lineTo(cx, mt + ch);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Glow
+      ctx.beginPath();
+      ctx.arc(cx, cy, 11, 0, Math.PI * 2);
+      ctx.fillStyle = glowColor;
+      ctx.fill();
+
+      // Dot
+      ctx.beginPath();
+      ctx.arc(cx, cy, 6, 0, Math.PI * 2);
+      ctx.fillStyle = dotColor;
+      ctx.fill();
+      ctx.strokeStyle = '#fff';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+    }
+  }
+
+  // Initial render
+  drawChart(null, null);
+  window.addEventListener('resize', () => {
+    const ew = v('emptyWt');
+    if (!ew) { drawChart(null, null); return; }
+    calc();
+  });
+</script>
+
+</body>
+</html>
