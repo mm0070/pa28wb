@@ -42,6 +42,18 @@
   .go{margin-top:16px;font-size:13px;font-weight:600;color:var(--accent);
     display:inline-flex;align-items:center;gap:5px}
 
+  .howto{max-width:520px;margin:8px auto 0;padding:0 20px;width:100%}
+  .howto summary{cursor:pointer;font-size:13px;font-weight:600;color:var(--accent);
+    text-align:center;list-style:none;padding:10px}
+  .howto summary::-webkit-details-marker{display:none}
+  .howto summary::after{content:" ▾";font-size:11px}
+  .howto[open] summary::after{content:" ▴"}
+  .howto ol{margin:6px 0 0;padding:14px 18px 14px 34px;background:var(--panel);
+    border:1px solid var(--line);border-radius:12px;font-size:13px;
+    color:var(--ink);line-height:1.7}
+  .howto li{margin-bottom:6px}
+  .howto li:last-child{margin-bottom:0}
+
   footer{padding:14px 20px 24px;text-align:center;color:var(--muted);font-size:12px}
 </style>
 </head>
@@ -81,6 +93,16 @@
       </a>
     </div>
   </main>
+
+  <details class="howto">
+    <summary>Add to your iPhone or iPad home screen</summary>
+    <ol>
+      <li>Open this page in <b>Safari</b> (it must be Safari, not Chrome).</li>
+      <li>Tap the <b>Share</b> button — the square with an arrow pointing up.</li>
+      <li>Scroll down and tap <b>Add to Home Screen</b>.</li>
+      <li>Tap <b>Add</b> in the top-right. The icon appears on your home screen and opens full-screen like an app.</li>
+    </ol>
+  </details>
 
   <footer>For planning use only — always cross-check.</footer>
 </body>
