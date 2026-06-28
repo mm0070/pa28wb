@@ -46,7 +46,7 @@
   .box{fill:var(--boxbg);stroke:#10141a;stroke-width:2}
   .boxdiv{stroke:#10141a;stroke-width:2}
   .boxhdg{font:600 19px/1 -apple-system,Arial,sans-serif;fill:#10141a;text-anchor:middle}
-  .boxdrift{font:600 19px/1 -apple-system,Arial,sans-serif;text-anchor:middle}
+  .boxdrift{font:600 17px/1 -apple-system,Arial,sans-serif;text-anchor:middle}
   .drift-L{fill:#c0392b}.drift-R{fill:#1f6f3f}.drift-0{fill:#10141a}
 
   /* ---- legend / table ---- */
@@ -66,16 +66,18 @@
 
   .planlog{margin-top:16px;background:var(--panel);border:1px solid var(--line);
     border-radius:14px;padding:14px}
-  .pgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .pgrid{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(3,1fr);
+    grid-auto-flow:column;gap:8px}
   .pcell{display:flex;align-items:stretch;border:1px solid var(--line);
     border-radius:8px;overflow:hidden}
-  .plab{flex:1;padding:6px 9px;font-size:14px;font-weight:600;color:var(--ink);
+  .plab{flex:0 0 52%;padding:7px 10px;font-size:16px;font-weight:600;color:var(--ink);
     display:flex;flex-direction:column;justify-content:center;background:#f0f3f6}
   .plab b{color:var(--accent);margin-right:4px}
-  .plab span{display:block;font-size:10px;font-weight:400;color:var(--muted);margin-top:1px}
-  .pcell input{width:42%;border:0;border-left:1px solid var(--line);background:#fff;
-    text-align:center;font-size:16px;color:var(--ink)}
-  .pcell input:focus{outline:none;background:#eaf3fc}
+  .plab span{display:block;font-size:11px;font-weight:400;color:var(--muted);margin-top:1px}
+  .pins{flex:1;display:flex;min-width:0}
+  .pins input{flex:1 1 0;width:0;min-width:0;border:0;border-left:1px solid #9aa6b2;
+    background:#fff;text-align:center;font-size:17px;color:var(--ink)}
+  .pins input:focus{outline:none;background:#eaf3fc}
   .maxdrift-cap{text-align:center;font-size:14px;color:var(--muted);margin:-6px 0 14px}
   .maxdrift-cap b{color:var(--ink);font-size:16px}
 
@@ -96,9 +98,9 @@
     .planlog{border:0;padding:0;margin:0}
     .pgrid{gap:9px}
     .pcell{border:1px solid #000;border-radius:6px}
-    .plab{padding:9px 11px;font-size:14px;background:#fff}
+    .plab{padding:9px 11px;font-size:15px;background:#fff}
     .plab span{font-size:11px}
-    .pcell input{font-size:15px}
+    .pins input{font-size:16px;border-left:1px solid #000}
     input{border:1px solid #000;color:#000;background:#fff}
     table td,table th{color:#000}
     tr:nth-child(even) td{background:#eee!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
@@ -130,9 +132,9 @@
   </div>
 
   <div class="rose-wrap">
-    <svg id="rose" viewBox="0 0 720 720" xmlns="http://www.w3.org/2000/svg"></svg>
+    <svg id="rose" viewBox="-24 0 768 720" xmlns="http://www.w3.org/2000/svg"></svg>
   </div>
-  <div class="maxdrift-cap">Max drift = <b id="maxdrift2">—</b>°</div>
+  <div class="maxdrift-cap">Wind <b id="wind2">—</b> &nbsp;·&nbsp; TAS <b id="tas2">—</b>kt &nbsp;·&nbsp; Max drift <b id="maxdrift2">—</b>°</div>
   <div class="legend noprint">
     <span><b style="color:#1f6f3f">▸ R</b> = drift right (steer right)</span>
     <span><b style="color:#c0392b">◂ L</b> = drift left (steer left)</span>
@@ -146,12 +148,12 @@
 
   <div class="planlog">
     <div class="pgrid">
-      <div class="pcell"><div class="plab"><b>1.</b> Distance<span>leg length, NM</span></div><input type="text"></div>
-      <div class="pcell"><div class="plab"><b>2.</b> Heading<span>desired track °T</span></div><input type="text"></div>
-      <div class="pcell"><div class="plab"><b>3.</b> Drift<span>wind L: subtract · R: add</span></div><input type="text"></div>
-      <div class="pcell"><div class="plab"><b>4.</b> VAR<span>°W: add · °E: subtract</span></div><input type="text"></div>
-      <div class="pcell"><div class="plab"><b>5.</b> Corr Heading<span>result, °M to fly</span></div><input type="text"></div>
-      <div class="pcell"><div class="plab"><b>6.</b> Time<span>from table at your GS</span></div><input type="text"></div>
+      <div class="pcell"><div class="plab"><b>1.</b> Distance<span>leg length, NM</span></div><div class="pins"><input type="text"><input type="text"><input type="text"></div></div>
+      <div class="pcell"><div class="plab"><b>2.</b> Heading<span>desired track °T</span></div><div class="pins"><input type="text"><input type="text"><input type="text"></div></div>
+      <div class="pcell"><div class="plab"><b>3.</b> Drift<span>wind L: subtract · R: add</span></div><div class="pins"><input type="text"><input type="text"><input type="text"></div></div>
+      <div class="pcell"><div class="plab"><b>4.</b> VAR<span>°W: add · °E: subtract</span></div><div class="pins"><input type="text"><input type="text"><input type="text"></div></div>
+      <div class="pcell"><div class="plab"><b>5.</b> Corr Heading<span>result, °M to fly</span></div><div class="pins"><input type="text"><input type="text"><input type="text"></div></div>
+      <div class="pcell"><div class="plab"><b>6.</b> Time<span>from table at your GS</span></div><div class="pins"><input type="text"><input type="text"><input type="text"></div></div>
     </div>
   </div>
 
@@ -172,6 +174,8 @@ function buildRose(){
   const maxDrift = tas>0 ? 60/tas*wspd : 0;
   document.getElementById('maxdrift').textContent = maxDrift.toFixed(1);
   const md2=document.getElementById('maxdrift2'); if(md2) md2.textContent = maxDrift.toFixed(1);
+  const w2=document.getElementById('wind2'); if(w2) w2.textContent = `${String(wdir).padStart(3,'0')}/${wspd}`;
+  const t2=document.getElementById('tas2'); if(t2) t2.textContent = tas;
 
   let s='';
   // dial
@@ -199,7 +203,7 @@ function buildRose(){
     const [fx,fy]=pt(deg,R-26);
     s+=`<line x1="${cx}" y1="${cy}" x2="${fx.toFixed(1)}" y2="${fy.toFixed(1)}" stroke="#9aa0a6" stroke-width="1.5"/>`;
     const [lx,ly]=pt(deg,R-78);
-    s+=`<text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" font-size="15" fill="#8a929b" font-style="italic" text-anchor="middle" dominant-baseline="middle" transform="rotate(${deg} ${lx.toFixed(1)} ${ly.toFixed(1)})">${lab}</text>`;
+    s+=`<text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" font-size="22" fill="#7a838d" font-style="italic" font-weight="600" text-anchor="middle" dominant-baseline="middle" transform="rotate(${deg} ${lx.toFixed(1)} ${ly.toFixed(1)})">${lab}</text>`;
   });
 
   // wind arrow (points the way wind blows TO = from dir +180)
@@ -207,16 +211,16 @@ function buildRose(){
     const blow = (wdir+180)%360;
     const [ax,ay]=pt(blow, R-50);
     const [bx,by]=pt(wdir, R-50);
-    s+=`<line x1="${bx.toFixed(1)}" y1="${by.toFixed(1)}" x2="${ax.toFixed(1)}" y2="${ay.toFixed(1)}" stroke="#4da6ff" stroke-width="3"/>`;
+    s+=`<line x1="${bx.toFixed(1)}" y1="${by.toFixed(1)}" x2="${ax.toFixed(1)}" y2="${ay.toFixed(1)}" stroke="#4da6ff" stroke-width="6"/>`;
     // arrowhead at blow end
     const ah=(blow-90)*Math.PI/180;
-    const hx=ax, hy=ay, AH=20, AW=0.45;
+    const hx=ax, hy=ay, AH=34, AW=0.42;
     s+=`<polygon points="${hx.toFixed(1)},${hy.toFixed(1)} ${(hx-AH*Math.cos(ah-AW)).toFixed(1)},${(hy-AH*Math.sin(ah-AW)).toFixed(1)} ${(hx-AH*Math.cos(ah+AW)).toFixed(1)},${(hy-AH*Math.sin(ah+AW)).toFixed(1)}" fill="#4da6ff"/>`;
-    s+=`<text x="${bx.toFixed(1)}" y="${(by-10).toFixed(1)}" font-size="11" fill="#4da6ff" text-anchor="middle">${wdir}/${wspd}</text>`;
+    s+=`<text x="${bx.toFixed(1)}" y="${(by-12).toFixed(1)}" font-size="14" font-weight="600" fill="#4da6ff" text-anchor="middle">${wdir}/${wspd}</text>`;
   }
 
   // boxes
-  const boxR=R+78, bw=92, bh=50;
+  const boxR=R+82, bw=116, bh=50;
   HEADINGS.forEach(hdg=>{
     const [bxc,byc]=pt(hdg,boxR);
     const x=bxc-bw/2, y=byc-bh/2;
@@ -231,9 +235,15 @@ function buildRose(){
     let cls = cross>0.5?'drift-R':cross<-0.5?'drift-L':'drift-0';
     let dir = cross>0.5?'R':cross<-0.5?'L':'';
 
-    // build bottom label; show 0°/0kt explicitly when wind present, blank only when no wind
-    let driftTxt = driftDeg>0 ? `${dir}${driftDeg}°` : '0°';
-    let gsTxt = (gsComp>0?'+':'')+gsComp;
+    // build bottom label; -L / +R drift sign, kt on GS, show 0 explicitly when wind present
+    let driftTxt;
+    if(driftDeg>0){
+      const sign = dir==='R' ? '+' : '-';
+      driftTxt = `${sign}${dir}${driftDeg}°`;
+    } else {
+      driftTxt = '0°';
+    }
+    let gsTxt = (gsComp>0?'+':'')+gsComp+'kt';
     let bottom = (wspd>0) ? `${driftTxt}  ${gsTxt}` : '';
 
     s+=`<rect class="box" x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${bw}" height="${bh}" rx="3"/>`;
